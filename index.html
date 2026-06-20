@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="YourQuiz — Test your medical knowledge with comprehensive question banks for Anatomy, Biochemistry, and Physiology.">
+    <title>YourQuiz — Medical Science Quiz</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="bg-orb bg-orb-1"></div>
+        <div class="bg-orb bg-orb-2"></div>
+        <div class="bg-orb bg-orb-3"></div>
+    </div>
+
+    <!-- ===================== LANDING SCREEN ===================== -->
+    <section id="landing-screen" class="screen active">
+        <div class="landing-container">
+            <div class="logo-badge">
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                    <rect width="48" height="48" rx="12" fill="url(#logo-grad)"/>
+                    <path d="M14 24C14 18.477 18.477 14 24 14V14C29.523 14 34 18.477 34 24V34H24C18.477 34 14 29.523 14 24V24Z" fill="white" fill-opacity="0.2"/>
+                    <text x="24" y="30" text-anchor="middle" fill="white" font-size="18" font-weight="700" font-family="Outfit">Q</text>
+                    <defs>
+                        <linearGradient id="logo-grad" x1="0" y1="0" x2="48" y2="48">
+                            <stop stop-color="#6C5CE7"/>
+                            <stop offset="1" stop-color="#00B4D8"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <h1 class="landing-title">Your<span class="gradient-text">Quiz</span></h1>
+            <p class="landing-subtitle">Master Medical Sciences with Confidence</p>
+            <p class="landing-desc">Comprehensive question banks for Anatomy, Biochemistry & Physiology — with instant feedback, detailed explanations, and progress tracking.</p>
+
+            <!-- Subject Selection -->
+            <div class="config-section">
+                <label class="config-label">Choose Subject</label>
+                <div class="subject-cards" id="subject-cards">
+                    <button class="subject-card selected" data-subject="biochemistry">
+                        <span class="subject-icon">🧬</span>
+                        <span class="subject-name">Biochemistry</span>
+                        <span class="subject-count" id="count-biochemistry">— Qs</span>
+                    </button>
+                    <button class="subject-card" data-subject="anatomy">
+                        <span class="subject-icon">🦴</span>
+                        <span class="subject-name">Anatomy</span>
+                        <span class="subject-count" id="count-anatomy">— Qs</span>
+                    </button>
+                    <button class="subject-card" data-subject="physiology">
+                        <span class="subject-icon">❤️</span>
+                        <span class="subject-name">Physiology</span>
+                        <span class="subject-count" id="count-physiology">— Qs</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Question Count -->
+            <div class="config-section">
+                <label class="config-label">Number of Questions</label>
+                <div class="count-selector" id="count-selector">
+                    <button class="count-btn" data-count="10">10</button>
+                    <button class="count-btn selected" data-count="25">25</button>
+                    <button class="count-btn" data-count="50">50</button>
+                    <button class="count-btn" data-count="all">All</button>
+                </div>
+            </div>
+
+            <!-- Chapter Selection (populated dynamically) -->
+            <div class="config-section" id="chapter-section" style="display:none;">
+                <label class="config-label">Select Chapter <span class="optional-tag">(optional)</span></label>
+                <select id="chapter-select" class="chapter-dropdown">
+                    <option value="all">All Chapters</option>
+                </select>
+            </div>
+
+            <button class="btn-start" id="btn-start">
+                <span>Start Quiz</span>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M7 4L13 10L7 16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+
+            <div class="landing-features">
+                <div class="feature-pill"><span>⚡</span> Instant Feedback</div>
+                <div class="feature-pill"><span>📖</span> Detailed Explanations</div>
+                <div class="feature-pill"><span>🔖</span> Bookmark Questions</div>
+                <div class="feature-pill"><span>⏱️</span> Timed Tests</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== QUIZ SCREEN ===================== -->
+    <section id="quiz-screen" class="screen">
+        <!-- Quiz Header -->
+        <header class="quiz-header">
+            <div class="quiz-header-left">
+                <button class="btn-icon" id="btn-quit" title="Quit Quiz">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+                <div class="quiz-subject-badge" id="quiz-subject-badge">Biochemistry</div>
+            </div>
+            <div class="quiz-header-center">
+                <div class="timer-display" id="timer-display">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                        <circle cx="9" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M9 6V10L12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M7 2H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    <span id="timer-text">25:00</span>
+                </div>
+            </div>
+            <div class="quiz-header-right">
+                <div class="progress-info">
+                    <span id="progress-current">1</span>/<span id="progress-total">25</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Progress Bar -->
+        <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="progress-bar-fill"></div>
+        </div>
+
+        <!-- Question Area -->
+        <div class="quiz-body">
+            <div class="question-card" id="question-card">
+                <div class="question-top-row">
+                    <span class="question-number" id="question-number">Q1</span>
+                    <button class="btn-bookmark" id="btn-bookmark" title="Bookmark this question">
+                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" id="bookmark-icon">
+                            <path d="M5 3H17V19L11 14L5 19V3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+                <p class="question-text" id="question-text">Loading question...</p>
+                <div class="options-container" id="options-container">
+                    <!-- Options rendered by JS -->
+                </div>
+                <div class="explanation-box" id="explanation-box" style="display: none;">
+                    <div class="explanation-header">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                            <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M9 8V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <circle cx="9" cy="5.5" r="0.75" fill="currentColor"/>
+                        </svg>
+                        <span>Explanation</span>
+                    </div>
+                    <p class="explanation-text" id="explanation-text"></p>
+                </div>
+            </div>
+
+            <!-- Question Navigation Pills -->
+            <div class="nav-pills-container" id="nav-pills-container">
+                <!-- Rendered by JS -->
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="quiz-nav">
+                <button class="btn-nav btn-prev" id="btn-prev" disabled>
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                        <path d="M11 4L6 9L11 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Previous</span>
+                </button>
+                <button class="btn-nav btn-next" id="btn-next">
+                    <span>Next</span>
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                        <path d="M7 4L12 9L7 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button class="btn-submit-quiz" id="btn-submit-quiz" style="display:none;">
+                    <span>Submit Quiz</span>
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                        <path d="M4 9L8 13L14 5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== RESULTS SCREEN ===================== -->
+    <section id="results-screen" class="screen">
+        <div class="results-container">
+            <h2 class="results-title">Quiz Complete!</h2>
+            <div class="score-card">
+                <div class="score-ring-wrapper">
+                    <svg class="score-ring" viewBox="0 0 120 120">
+                        <circle cx="60" cy="60" r="52" stroke="rgba(255,255,255,0.08)" stroke-width="10" fill="none"/>
+                        <circle id="score-ring-circle" cx="60" cy="60" r="52" stroke="url(#score-grad)" stroke-width="10" fill="none"
+                            stroke-linecap="round" stroke-dasharray="326.73" stroke-dashoffset="326.73" transform="rotate(-90 60 60)"/>
+                        <defs>
+                            <linearGradient id="score-grad" x1="0" y1="0" x2="120" y2="120">
+                                <stop stop-color="#6C5CE7"/>
+                                <stop offset="1" stop-color="#00E676"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <div class="score-percent" id="score-percent">0%</div>
+                </div>
+                <div class="score-stats">
+                    <div class="stat-item stat-correct">
+                        <span class="stat-icon">✅</span>
+                        <span class="stat-value" id="stat-correct">0</span>
+                        <span class="stat-label">Correct</span>
+                    </div>
+                    <div class="stat-item stat-wrong">
+                        <span class="stat-icon">❌</span>
+                        <span class="stat-value" id="stat-wrong">0</span>
+                        <span class="stat-label">Wrong</span>
+                    </div>
+                    <div class="stat-item stat-skipped">
+                        <span class="stat-icon">⏭️</span>
+                        <span class="stat-value" id="stat-skipped">0</span>
+                        <span class="stat-label">Skipped</span>
+                    </div>
+                    <div class="stat-item stat-time">
+                        <span class="stat-icon">⏱️</span>
+                        <span class="stat-value" id="stat-time">0:00</span>
+                        <span class="stat-label">Time</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-actions">
+                <button class="btn-answer-sheet" id="btn-answer-sheet">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <rect x="3" y="2" width="14" height="16" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M7 7H13M7 10H13M7 13H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    <span>View Answer Sheet</span>
+                </button>
+                <button class="btn-retake" id="btn-retake">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M4 10C4 6.68629 6.68629 4 10 4C13.3137 4 16 6.68629 16 10C16 13.3137 13.3137 16 10 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M2 8L4 10L6 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Retake Quiz</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== ANSWER SHEET SCREEN ===================== -->
+    <section id="answersheet-screen" class="screen">
+        <header class="sheet-header">
+            <button class="btn-icon" id="btn-back-results" title="Back to Results">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M13 4L7 10L13 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+            <h2 class="sheet-title">Answer Sheet</h2>
+            <div class="sheet-filters" id="sheet-filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="correct">✅ Correct</button>
+                <button class="filter-btn" data-filter="wrong">❌ Wrong</button>
+                <button class="filter-btn" data-filter="skipped">⏭️ Skipped</button>
+                <button class="filter-btn" data-filter="bookmarked">🔖 Bookmarked</button>
+            </div>
+        </header>
+        <div class="sheet-body" id="sheet-body">
+            <!-- Rendered by JS -->
+        </div>
+        <div class="sheet-footer">
+            <button class="btn-retake" id="btn-retake-sheet">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M4 10C4 6.68629 6.68629 4 10 4C13.3137 4 16 6.68629 16 10C16 13.3137 13.3137 16 10 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M2 8L4 10L6 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Retake Quiz</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- Confirmation Modal -->
+    <div class="modal-overlay" id="modal-overlay" style="display:none;">
+        <div class="modal-card">
+            <h3 class="modal-title" id="modal-title">Submit Quiz?</h3>
+            <p class="modal-desc" id="modal-desc">Are you sure you want to submit? You have unanswered questions.</p>
+            <div class="modal-actions">
+                <button class="btn-modal-cancel" id="modal-cancel">Cancel</button>
+                <button class="btn-modal-confirm" id="modal-confirm">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="questions.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
